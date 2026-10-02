@@ -89,6 +89,8 @@ The execution corpus compounds only within its permitted use and retention bound
 
 ## Build sequence and evaluation
 
+A bounded first experiment is the [LLMSuite work-profile pilot](docs/profile-pilot.md): `/profile` turns chat evidence into an editable work-context card and collects user corrections and reuse preferences. It tests the memory loop independently of always-on task execution.
+
 The first milestone is a multi-session responsibility that survives an injected process restart and model swap, incorporates a new enterprise event, and resumes with correct state and no lost or duplicated side effects in the tested connectors.
 
 **Durability → Context → Proactivity → Learning**
