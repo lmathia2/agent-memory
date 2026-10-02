@@ -38,24 +38,7 @@ The opportunity is to combine these ideas around persistent enterprise responsib
 
 The agent plane maintains work, compiles context, and proposes operations. The authority plane mediates access to enterprise systems, including event subscriptions, tool execution, writes, and notifications. Authorized observations return to the timeline and runtime; there is no direct path from the model to enterprise systems.
 
-```mermaid
-flowchart TB
-    subgraph Agent["Agent plane"]
-        T["Personal work timeline"] --> P["Derived memory"]
-        T --> C["Context compiler"]
-        P --> C
-        W["Durable work and triggers"] --> C
-        S["Skills and programs"] --> C
-        C --> M["Replaceable model"]
-        M -->|"updates work"| W
-    end
-    M -->|"proposed reads and actions"| A["Authority plane"]
-    W -->|"subscriptions and background operations"| A
-    A -->|"permitted operations"| E["Enterprise data, tools, and execution environments"]
-    E -->|"events and results"| A
-    A -->|"authorized evidence"| T
-    A -->|"authorized events"| W
-```
+![Block overview: durable evidence, memory, work, and skills feed compiled context and a replaceable model; the authority plane governs enterprise access.](assets/agent-overview.svg)
 
 Model weights, retrieval indexes, prompts, and context strategies can change. The enterprise retains the evidence record, operational state, authorization policy, versioned procedures, and evaluation corpus. **Task state is authoritative operational state; it must not depend on reconstruction from a transcript.**
 
