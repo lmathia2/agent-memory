@@ -2,50 +2,122 @@
 
 *Lambert Mathias · October 1, 2026*
 
-## The product thesis
+## The proposal
 
 Evolve an enterprise assistant such as LLM Suite into a personal agent that carries delegated responsibilities across days, applications, and model changes.
 
 > **“Own my preparation for this account and keep me current.”**
 
-The agent maintains the account's working picture, follows relevant developments, tracks unresolved commitments, and prepares the employee before upcoming meetings. It continues authorized work while the employee is offline. When they return, they can see what changed, what is complete, what is blocked, and what needs their attention.
+The employee gets a continuing workspace for that responsibility: current account context, upcoming meetings, outstanding commitments, and work in progress. The agent updates it when relevant messages, documents, or data arrive, continues authorized analysis in the background, and surfaces material developments before they matter. The employee can inspect the evidence, redirect the work, pause it, or change its scope without starting over.
 
-This requires three capabilities beneath the experience: evidence that remains available across sessions, work that can resume after interruption, and memory and context that adapt to the task and the model. Permissions remain independently enforced.
+To enable this, build persistent state below the model: a work timeline, a durable task runtime with event subscriptions, memory derived from evidence, a context compiler, and governed tools. Models reason over a sufficient working context reconstructed from that state. An independent authority plane governs every read and action.
+
+**Always-on means persistent responsibility, implemented through event-driven execution.** The earlier Personal Timeline work addressed how an agent remembers across time. This proposal extends it to how an agent continues work and remains responsible across time.
+
+The first milestone is concrete: a task spanning multiple sessions survives an injected process restart and a model swap, incorporates a new enterprise event, and resumes with correct state and no lost or duplicated side effects in the tested connectors.
+
+The design rule:
 
 > **The timeline is evidence. Memory is computed from it. Work is durable. Context is compiled. Authority is external.**
 
-The earlier Personal Timeline idea asked how an agent remembers across time. The product proposed here asks how it remains responsible across time. **Always-on means persistent responsibility.**
+No amount of accumulated memory increases authority.
 
-## What the employee experiences
+## Why now
 
-An employee delegates an account, project, or recurring responsibility with a scope: which sources matter, what the agent should maintain, when to bring something to their attention, and which actions are permitted.
+Recent systems provide useful precedents for different parts of this design. Their capabilities support the proposed direction; they do not establish its reliability at enterprise scale.
 
-For an account-preparation responsibility, the agent might begin by assembling the current picture and outstanding questions. A revised document arrives the next day; it updates the relevant analysis and identifies a discrepancy. Before a meeting, it prepares a brief grounded in the new evidence and prior decisions. Afterwards, it records agreed follow-ups and carries them forward. The employee can correct its understanding, redirect it, or pause the responsibility at any point.
+- **[Pi Durable](https://earendil.com/posts/pi-durable/)** makes model calls, tools, and compaction checkpointed tasks; retains transcripts after context resets; and commits typed application state alongside the transcript. Its experimental runtime distinguishes exactly-once submission from safe tool replay. This is the central systems insight: execution state can persist independently of model context.
+- **[Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)** externalizes bulky observations to addressable files and references. Context can shrink while omitted evidence remains recoverable.
+- **[OpenClaw](https://docs.openclaw.ai/concepts/memory-architecture)** separates episodic evidence, curated memory, and prospective intents, with provenance and gates for memory promotion. Intent lifecycle and matching live in code rather than depending on recall alone.
+- **[Muse](https://introducing.muse.ai/)** combines an agent workspace, background execution, event-driven follow-up, and visible goals and activity. Its [Sentinel security boundary](https://security.muse.ai/) mediates access, credentials, approvals, and egress independently of agent reasoning.
+- **[Meta-Harness](https://arxiv.org/abs/2603.28052)** searches over code that controls what a fixed model stores, retrieves, and sees. **[Growing Harness](https://arxiv.org/abs/2609.26760)** learns reusable control programs from failure traces, accepting repairs through a held-out gate. These are evidence that harness behavior is a learning surface, not proof of production-safe self-improvement.
 
-The product keeps this work inspectable. The employee can ask why an item matters, recover the evidence behind a conclusion, and see what the agent has done. A new conversation continues the responsibility rather than requiring the employee to reconstruct its history.
+The opportunity is to combine these ideas around persistent enterprise responsibilities, with explicit provenance and authority boundaries.
 
-Personal continuity also matters across responsibilities. A working preference or prior decision may be useful to a new task, but the employee's entire history should not accompany every request. The agent selects relevant context under the user's sharing instructions and enterprise permissions. The employee can specify what may be reused, what stays within a project, and what should not be shared with a particular task.
+## Architecture
 
-Background work should usually update the working picture quietly. The agent interrupts when a material development needs attention or input. The employee controls the responsibility's scope, ongoing activity, and notification behavior.
+The agent plane maintains work, compiles context, and proposes operations. The authority plane mediates access to enterprise systems, including event subscriptions, tool execution, writes, and notifications. Authorized observations return to the timeline and runtime; there is no direct path from the model to enterprise systems.
 
-## The technical bet
+```mermaid
+flowchart TB
+    subgraph Agent["Agent plane"]
+        T["Personal work timeline"] --> P["Derived memory"]
+        T --> C["Context compiler"]
+        P --> C
+        W["Durable work and triggers"] --> C
+        S["Skills and programs"] --> C
+        C --> M["Replaceable model"]
+        M -->|"updates work"| W
+    end
+    M -->|"proposed reads and actions"| A["Authority plane"]
+    W -->|"subscriptions and background operations"| A
+    A -->|"permitted operations"| E["Enterprise data, tools, and execution environments"]
+    E -->|"events and results"| A
+    A -->|"authorized evidence"| T
+    A -->|"authorized events"| W
+```
 
-The state accumulated through work should persist independently of any particular model or conversation: evidence, decisions, ongoing tasks, commitments, and authorization records. That gives future models a basis for continuing work and revisiting earlier interpretations.
+Model weights, retrieval indexes, prompts, and context strategies can change. The enterprise retains the evidence record, operational state, authorization policy, versioned procedures, and evaluation corpus. **Task state is authoritative operational state; it must not depend on reconstruction from a transcript.**
 
-Memory and context strategies should remain adaptable. The model can choose how to organize permitted evidence, maintain useful artifacts, and construct its working set through tool interfaces. Files, databases, and vector stores offer capabilities it can use and combine; a fixed taxonomy of preferences, episodes, and facts need not define how it remembers.
+### Five capabilities within the agent plane
 
-“Context is compiled” means that the next model input is constructed from available state and evidence under current permissions. It leaves room for the model to choose and edit its working view. The product depends on continuity and appropriate sharing; it does not depend on one storage backend, retrieval method, or agent topology.
+**1. Timeline: what happened.** An append-oriented evidence record spanning relevant messages, meetings, document versions, observations, actions, approvals, corrections, and outcomes. Events carry source, actor, time, trust, entitlement and retention metadata, and artifact references. Corrections normally add evidence; retention, deletion, and legal holds govern what remains available. The record preserves observations and claims without treating every claim as true.
 
-[Pi Durable](https://earendil.com/posts/pi-durable/) provides a precedent for separating durable execution and application state from model context. [Context Language Models](https://arxiv.org/html/2609.37725v1) provide evidence for letting models manage their live working context. Combining these ideas motivates a system with durable responsibilities and evolving memory strategies. Their extension to long-term enterprise personal agents remains a design and evaluation question.
+**2. Derived memory: what we currently believe.** Preferences, entities, projects, decisions, and summaries are versioned projections over evidence. Each has provenance, temporal validity, and the program version that produced it; inferred claims also carry confidence or verification status. Corrections invalidate affected projections through lineage. Summaries remain lossy, but retained evidence makes them repairable and allows better programs to recompute them later.
 
-A [separate architecture note](docs/architecture.md) describes one possible implementation, including agentic memory tools, asynchronous maintenance, scoped context delivery, storage and query interfaces, recovery, and enterprise controls.
+**3. Durable work: what continues.** Tasks, plans, typed application state, waits, retries, deadlines, approvals, and commitments survive failures and context resets. Standing conditions and subscriptions are evaluated against incoming enterprise events, waking work without continuous inference. Intent state includes scope, expiry, cooldown, and cancellation. Event delivery requires deduplication and recovery from missed delivery.
 
-## What success looks like
+Durability alone does not make external actions exactly-once. Connectors need stable operation IDs, idempotency where supported, and reconciliation when an action may have succeeded before its result was recorded. An ambiguous non-idempotent operation pauses for resolution rather than being blindly replayed. Recovery rechecks current authority before continuing.
 
-The employee can delegate a responsibility once, then return to work that has continued coherently. Relevant developments are incorporated, commitments remain visible, and useful preparation arrives without repeated prompting. Corrections and changes in scope take effect across subsequent work.
+**4. Skills: what we know how to do.** Governed, versioned procedures implement recurring retrieval, transformations, checks, and recovery behavior. Traces can suggest improvements, but successful repetition alone does not authorize promotion. Procedures remain independently testable and replaceable as models improve.
 
-The agent reduces preparation effort and missed commitments without creating a stream of unnecessary interruptions. Its conclusions are traceable to evidence, its activity is inspectable, and accumulated memory never increases its authority.
+**5. Context compiler: what this model needs now.** Before a consequential model invocation, assemble sufficient context from task state, authorized evidence, relevant projections, policy, and skills. Context budgets and formats can vary by model. Nothing required for continuity exists only in the prompt.
+
+Compaction may use summaries, provided omitted evidence retains resolvable references under retention policy. A URL alone is insufficient when the original observation must be reconstructed; retain a permitted source version or snapshot. Log the compiled context or a reconstructable manifest, its integrity hash, model and program versions, and the resulting action. A hash verifies retained content; it cannot reconstruct missing content or reproduce a model's reasoning.
+
+Recomputing memory and context is distinct from execution recovery. Rebuilding a view never re-executes external side effects.
+
+## Enterprise constraints
+
+Persistent agents accumulate both evidence and opportunities to act. Authority therefore remains outside model control and is evaluated against current identity, entitlements, purpose, data classification, approval scope, and information barriers.
+
+| Constraint | Required behavior |
+| --- | --- |
+| **Retention and deletion** | Expiry or deletion propagates through source copies, indexes, projections, cached context, and other dependent artifacts, subject to legal holds. Audit retention follows its own approved policy. |
+| **Revoked access** | A source that is no longer authorized cannot influence future context or actions through a cached summary or derived artifact. Invalidate affected views, rebuild from permitted evidence, and stop or re-scope affected work. |
+| **Information barriers** | Derived summaries and procedures preserve contributing sources' restrictions. Mixed-source artifacts cannot cross a barrier simply because the original content was transformed. |
+| **Untrusted content** | Source trust propagates into projections and context. Instructions in retrieved content cannot create capabilities or approvals; enforcement lives in the authority plane. |
+| **Auditability** | Retain policy-permitted inputs or references, operation IDs, tool results, versions, policy decisions, and approvals sufficient to establish what an action was based on and why it was permitted. |
+
+Revocation can stop future use; it cannot erase information already shown to a person or undo a completed action. That makes authorization at both context construction and execution essential.
+
+## Proactivity and learning
+
+An ongoing responsibility needs both a wake-up rule and an interruption rule. Incoming events or timers resume authorized work. The runtime then decides whether a result should update the workspace silently, wait for the next interaction, or notify the employee. Evaluate material developments surfaced and missed alongside unnecessary interruptions; alert volume alone measures little.
+
+Verified execution traces can improve retrieval programs, context policies, skills, routing, and verification. Learning has three gates:
+
+- **Evidence:** distinguish verified outcomes from model assertions before promoting a derived claim or procedure.
+- **Boundary:** preserve source restrictions. Cross-user procedures require explicit clearance and evaluation for embedded confidential content; abstraction alone does not establish that they are safe to share.
+- **Acceptance:** review candidate changes, initially with human approval, then test them against held-out tasks for success, safety, cost, and regression before deployment. Version and roll back accepted changes.
+
+The execution corpus compounds only within its permitted use and retention boundaries.
+
+## Build sequence and evaluation
+
+**Durability → Context → Proactivity → Learning**
+
+| Stage | Build | Exit criterion |
+| --- | --- | --- |
+| **Durability** | Timeline, checkpointed tasks, typed state, event ingestion, governed connectors, and operation audit. | A multi-session task passes injected restarts and a model swap, incorporates a new event, and preserves state. Tested connectors produce no lost or duplicated effects; ambiguous outcomes are explicitly reconciled or paused. |
+| **Context** | Versioned projections, lineage, and a model-aware context compiler. | Correction, deletion, and revocation tests remove affected evidence from future contexts and actions, including through derived artifacts. Retained inputs can be reconstructed within audit policy. |
+| **Proactivity** | Standing intents, subscriptions, lifecycle controls, and notification policy. | The agent surfaces relevant developments with measured coverage and interruption precision, and honors cancellation, expiry, and changed permissions. |
+| **Learning** | Trace mining into candidate procedures and harness changes, with review and acceptance gates. | Accepted changes improve held-out task outcomes within agreed safety and cost bounds and can be rolled back. |
+
+Track completion across sessions, recovery correctness, projection accuracy and staleness, proactive coverage and precision, cost per completed responsibility, and audit reconstruction time. Measure user value separately through preparation effort and missed commitments.
+
+The remaining design questions are concrete: timeline fidelity and storage cost at firm scale; incremental versus batch projection maintenance; ownership and handover when an employee changes roles; and the review process for learned programs. These require implementation and evaluation rather than another memory taxonomy.
 
 ## North star
 
-A personal enterprise agent carries work forward without making the employee reconstruct it each morning. The enterprise preserves continuity and control while improving models keep changing how the agent reasons, organizes memory, and uses context.
+A personal enterprise agent carries work forward without making the employee reconstruct it each morning. It can show what changed, what remains outstanding, what it is doing, and under whose authority. As models improve, the same permitted evidence and durable work state support better reasoning and better procedures. The continuity belongs to the system; intelligence can keep changing.
