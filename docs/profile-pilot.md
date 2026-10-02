@@ -143,6 +143,8 @@ Evaluate **profile quality** and **the value of using that profile** separately.
 | Product question | Evidence to collect | Decision it informs |
 | --- | --- | --- |
 | Does the card capture what matters about my work? | Per-claim correctness and relevance; important omissions; user-added context; differences by claim type and activity cohort. | Which fields to keep, ask about, or omit. |
+| What can we learn from chat alone? | Compare source-supported claims with user-confirmed work context; measure accuracy and omissions separately for explicit self-description, observed assistant use, inferred preferences and current focus. | Which profile fields can be generated, which need a question, and which require other connectors. |
+| How much diversity does each field need? | Match histories on conversation volume while varying workflow breadth, context, time span and explicit feedback; measure accuracy and coverage by field. | Evidence requirements and sampling policy, rather than a single minimum number of weeks. |
 | Is LLMSuite history representative enough? | Users distinguish “what I ask the assistant” from “what my job involves”; compare history windows and work-domain coverage. | Whether chat-only memory is sufficient or another connector is needed. |
 | Does the user want this remembered? | Confirmed claims allowed for reuse versus excluded claims; rejection reasons such as incorrect, irrelevant, too personal, or too specific to a project. | Memory scope and defaults. |
 | Is review understandable and worth the effort? | Review completion, time and edits; whether users can locate evidence, remove a claim and understand its future use. | Review UX and whether to shorten the card. |
@@ -166,6 +168,29 @@ Evaluate **profile quality** and **the value of using that profile** separately.
 Use the same model and source access across conditions. In offline paired comparisons, use held-out later requests not used to construct the profile, blind response order, and obtain user ratings where personal relevance matters. A live test can randomize users to conditions to reduce carryover from earlier personalized responses. Do not insert the whole card into every prompt.
 
 The primary product outcome is **less repeated setup with equal or better task usefulness**. Track explicit background/preference restatements, user corrections, time to an acceptable result, and rated usefulness. Track factual quality, irrelevant personalization, latency and cost alongside the benefit. Preference-only gains must not be attributed to deeper work understanding.
+
+### Chat-only learnability and evidence diversity
+
+Treat chat history as a **partial view of the employee through their use of LLMSuite**. Ask users to confirm both what the card gets right and what relevant work never appears in chat. User-added context measures missing coverage; it must not be counted as something the extractor learned from history.
+
+| Claim type | What chat can support | What additional diversity contributes |
+| --- | --- | --- |
+| Explicit self-description | “I lead the credit analytics team” can support an attributed role claim from one genuine self-description, subject to recency and confirmation. | More conversations may resolve scope or changes; repetition is not necessary to establish that the user stated it. |
+| Observed assistant use | Repeated drafting requests support “uses LLMSuite for drafting.” | Distinct workflows and conversations show breadth of assistant use, not the distribution of the user's total work. |
+| Assistance preference | “For this email, make it shorter” supports a local instruction. | Similar corrections across different audiences and workflows can support a broader candidate preference; conflicting contexts may require scoped preferences. |
+| Current focus | Repeated discussion can support “has recently explored this initiative.” | Evidence across dates and explicit ownership statements help distinguish a continuing focus from a one-off request. |
+| Expertise | Explicit user statements can support attributed expertise. | Diverse questions alone still do not establish expertise or proficiency. |
+| Unobserved work activity | Chat may contain an explicit report about meetings, tools or deadlines. | More chat volume cannot verify actual attendance, delivery, productivity or communication-channel usage. |
+
+Measure diversity on separate axes: **workflow** (drafting, summarization, analysis, coding, research); **audience/context** (self, peers, leadership, clients, projects); **time** (days and weeks); and **signal** (requests, self-description, corrections, acceptance or rejection). Assign these from observed content, allow unknown values, and validate a sample. Multiple edits within one conversation or copied prompts are correlated evidence, not independent observations.
+
+For example, twenty conversations drafting similar emails may strongly characterize that use and its local style while revealing little about the user's broader responsibilities. Five conversations spanning analysis, drafting, coding and planning may expose more breadth but still leave role ownership unknown. Neither history is automatically the better profile source for every field.
+
+**D. Diversity experiment.** Construct authorized history subsets matched on conversation count and approximate token volume, but varying workflow/context breadth and temporal spread. Also compare more repetitions within one workflow against adding a new workflow at a similar evidence budget. Repeat subset sampling and report uncertainty; use a fixed user-confirmed reference collected independently of the cards to reduce anchoring.
+
+Plot or tabulate correctness, useful coverage, unsupported generalizations and omissions as evidence is added. Distinguish evidence available from evidence retained by the extraction process. Evaluate explicitly stated claims separately from pattern-based claims so a role stated once does not inflate apparent diversity gains.
+
+The resulting deliverable is a **field-specific evidence policy**: when one explicit statement suffices, when repeated independent observations support a scoped inference, when to ask the user, and when to leave a field absent. History duration and activity cohorts are sampling controls; they are not substitutes for this policy.
 
 ### Acceptance and next-step decisions
 
