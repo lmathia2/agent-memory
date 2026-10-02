@@ -18,6 +18,8 @@ A task agent decomposes a user request into memory queries. A user-representing 
 | **4. Skills** | Supply versioned retrieval, maintenance, verification, and context-presentation programs. |
 | **5. Context compiler** | Combine permitted memory responses with task state, policy, and skills to materialize the next task-model input. |
 
+The [timeline event note](timeline-events.md) specifies the compact work ledger, source evidence references, and connector admission rules.
+
 ## Synchronous query path
 
 1. **Decompose.** The task agent identifies missing information and generates one or more memory queries. It can issue additional queries as reasoning progresses.
