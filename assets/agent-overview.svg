@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="685" viewBox="0 0 1200 685" role="img" aria-labelledby="title desc">
+<title id="title">Durable personal agent: a block overview</title><desc id="desc">Durable memory, work, skills, and timeline feed compiled context for a replaceable model. An independent authority plane mediates every read and action with enterprise systems.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/></marker></defs>
+<rect width="1200" height="685" fill="#ffffff"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<text x="36" y="48" text-anchor="start" font-size="30" font-weight="700" fill="#0f172a">Durable personal agent</text>
+<rect x="36" y="85" width="766" height="545" rx="20" fill="#f8fafc" stroke="#dbe3ed" stroke-width="1.5"/>
+<text x="62" y="117" text-anchor="start" font-size="15" font-weight="700" fill="#64748b">AGENT PLANE</text>
+<rect x="180" y="139" width="480" height="82" rx="14" fill="#eef2ff" stroke="#a5b4fc" stroke-width="1.5"/>
+<text x="420" y="173" text-anchor="middle" font-size="25" font-weight="700" fill="#3730a3">Replaceable model</text>
+<text x="420" y="199" text-anchor="middle" font-size="18" font-weight="400" fill="#4f46e5">Reasoning and proposed actions</text>
+<rect x="180" y="268" width="480" height="82" rx="14" fill="#f0fdfa" stroke="#99d6cd" stroke-width="1.5"/>
+<text x="420" y="302" text-anchor="middle" font-size="25" font-weight="700" fill="#115e59">Compiled context</text>
+<text x="420" y="328" text-anchor="middle" font-size="18" font-weight="400" fill="#0f766e">The working set for this step</text>
+<path d="M 420 257 L 420 233" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="442" y="247" text-anchor="start" font-size="16" font-weight="400" fill="#64748b">context</text>
+<path d="M 420 393 L 420 361" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="442" y="382" text-anchor="start" font-size="16" font-weight="400" fill="#64748b">assembled from durable state</text>
+<text x="64" y="401" text-anchor="start" font-size="15" font-weight="700" fill="#64748b">DURABLE STATE</text>
+<rect x="64" y="418" width="220" height="83" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="174" y="452" text-anchor="middle" font-size="23" font-weight="700" fill="#0f172a">Memory</text>
+<text x="174" y="478" text-anchor="middle" font-size="17" font-weight="400" fill="#475569">Derived views</text>
+<rect x="309" y="418" width="220" height="83" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="419" y="452" text-anchor="middle" font-size="23" font-weight="700" fill="#0f172a">Work</text>
+<text x="419" y="478" text-anchor="middle" font-size="17" font-weight="400" fill="#475569">Tasks and commitments</text>
+<rect x="554" y="418" width="220" height="83" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="664" y="452" text-anchor="middle" font-size="23" font-weight="700" fill="#0f172a">Skills</text>
+<text x="664" y="478" text-anchor="middle" font-size="17" font-weight="400" fill="#475569">Versioned procedures</text>
+<rect x="64" y="524" width="710" height="70" rx="14" fill="#eaf3fa" stroke="#bad3e8" stroke-width="1.5"/>
+<text x="419" y="554" text-anchor="middle" font-size="23" font-weight="700" fill="#164e75">Personal work timeline</text>
+<text x="419" y="580" text-anchor="middle" font-size="18" font-weight="400" fill="#336888">Evidence and provenance</text>
+<path d="M 813 309 L 868 309" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="1020" y="238" text-anchor="middle" font-size="15" font-weight="700" fill="#64748b">EVERY READ AND ACTION</text>
+<rect x="880" y="263" width="280" height="181" rx="14" fill="#fffbeb" stroke="#e7ca83" stroke-width="1.5"/>
+<text x="1020" y="300" text-anchor="middle" font-size="24" font-weight="700" fill="#92400e">Authority plane</text>
+<text x="1020" y="338" text-anchor="middle" font-size="17" font-weight="400" fill="#8c6429">Identity and entitlements</text>
+<text x="1020" y="365" text-anchor="middle" font-size="17" font-weight="400" fill="#8c6429">Policy and approvals</text>
+<text x="1020" y="392" text-anchor="middle" font-size="17" font-weight="400" fill="#8c6429">Credentials, egress, audit</text>
+<path d="M 1020 457 L 1020 504" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="1040" y="487" text-anchor="start" font-size="15" font-weight="400" fill="#64748b">governed access</text>
+<rect x="880" y="517" width="280" height="87" rx="14" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+<text x="1020" y="551" text-anchor="middle" font-size="22" font-weight="700" fill="#0f172a">Enterprise systems</text>
+<text x="1020" y="578" text-anchor="middle" font-size="17" font-weight="400" fill="#475569">Data, tools, connectors</text>
+<text x="36" y="664" text-anchor="start" font-size="18" font-weight="400" fill="#64748b">Durable state persists. Models and context strategies can change.</text>
+</g>
+</svg>
