@@ -48,26 +48,7 @@ Compaction can use summaries when omitted evidence remains recoverable under ret
 
 Log the context or a reconstructable manifest, its integrity hash, relevant versions, and the resulting operation. A hash verifies retained content; it cannot reconstruct missing content or explain hidden model reasoning.
 
-```mermaid
-flowchart TB
-    subgraph Agent["Agent plane"]
-        T["Timeline and retained evidence"] --> R["Memory agent"]
-        C["Compiled task context"] --> M["Task agent"]
-        M -->|"context edits"| C
-        M -->|"memory requests"| R
-        W["Durable work runtime"] -->|"task state"| C
-        M -->|"proposed work updates"| W
-    end
-    R -->|"proposed context package"| A["Authority plane"]
-    A -->|"permitted context"| C
-    R -->|"memory tool operations"| A
-    M -->|"task tool operations"| A
-    W -->|"subscriptions and background operations"| A
-    A -->|"permitted operations"| E["Data, stores, tools, and execution environments"]
-    E -->|"events and results"| A
-    A -->|"authorized evidence"| T
-    A -->|"authorized events"| W
-```
+![Agentic memory blocks: model-chosen strategy uses durable, governed tool interfaces over files, databases, and vector stores.](../assets/agent-memory.svg)
 
 ## Work and authority remain explicit
 
